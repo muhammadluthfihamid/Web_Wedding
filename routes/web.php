@@ -82,8 +82,6 @@ Route::prefix('admin')->group(function () {
 
     // Redirect /admin → login (no name needed; nothing references this route by name)
     Route::get('/', function () {
-        return redirect()->route('login');
-    });
 
     Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
 
