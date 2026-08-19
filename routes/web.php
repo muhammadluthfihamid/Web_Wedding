@@ -60,8 +60,6 @@ Route::middleware('auth')->group(function () {
 | AUTH ROUTES
 |--------------------------------------------------------------------------
 */
-Route::get('/login', fn () => view('auth.login'))->name('login');
-
 Auth::routes([
     'register' => true,
 ]);
@@ -82,11 +80,8 @@ Route::get('/rental-info', function () {
 */
 Route::prefix('admin')->group(function () {
 
+    // Redirect /admin → login (no name needed; nothing references this route by name)
     Route::get('/', function () {
-        return view('auth.login');
-    })->name('admin.login');
-
-    Auth::routes();
 
     Route::middleware(['auth', 'role:superadmin,admin'])->group(function () {
 
@@ -120,7 +115,6 @@ Route::prefix('admin')->group(function () {
         Route::resource('wish', WishController::class)->only(['index', 'destroy']);
 
         Route::get('/profile',  [ProfileController::class, 'index'])->name('profile.index');
-        Route::get('/profile-user', [ProfileController::class, 'index'])->name('profile');
         Route::put('/profile',  [ProfileController::class, 'update'])->name('profile.update');
 
         // Notification mark-as-read (AJAX)

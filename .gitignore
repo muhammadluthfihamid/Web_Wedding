@@ -17,6 +17,9 @@ public_html/hot
 
 storage/*.key
 .env
+*.zip
+vendor.zip
+Web_wedding_invitations-master.zip
 Homestead.yaml
 Homestead.json
 /.vagrant

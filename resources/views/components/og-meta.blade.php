@@ -23,13 +23,13 @@
 
     if ($isKhitanan) {
         $namaAnak = $namaPria ?: ($namaIstri ?: 'Ananda');
-        $ogTitle = "Undangan Khitanan " . e($namaAnak) . ($guestTo ? " - Yth. " . e($guestTo) : "");
+        $ogTitle = "Undangan Khitanan " . $namaAnak . ($guestTo ? " - Yth. " . $guestTo : "");
         $ogDescription = "Tanpa mengurangi rasa hormat, kami mengundang anda untuk hadir di acara khitanan kami.";
     } else {
         $namaIstri = $namaIstri ?: 'Mempelai Wanita';
         $namaPria = $namaPria ?: 'Mempelai Pria';
         $coupleTitle = $namaIstri . ' & ' . $namaPria;
-        $ogTitle = "Undangan Pernikahan " . e($coupleTitle) . ($guestTo ? " - Yth. " . e($guestTo) : "");
+        $ogTitle = "Undangan Pernikahan " . $coupleTitle . ($guestTo ? " - Yth. " . $guestTo : "");
         $ogDescription = "Tanpa mengurangi rasa hormat, kami mengundang anda untuk hadir di acara pernikahan kami.";
     }
 

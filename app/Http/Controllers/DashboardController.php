@@ -12,6 +12,7 @@ use App\Models\TurutMengundang;
 use App\Models\User;
 use App\Models\Wish;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
