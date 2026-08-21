@@ -1,49 +1,49 @@
 @php
-    $userTenant = $tenant ?? (isset($infos) && $infos->first()?->user ? $infos->first()->user : Auth::user());
-    $isKhitanan = $userTenant ? $userTenant->isKhitanan() : false;
+$userTenant = $tenant ?? (isset($infos) && $infos->first()?->user ? $infos->first()->user : Auth::user());
+$isKhitanan = $userTenant ? $userTenant->isKhitanan() : false;
 
-    $namaIstri = null;
-    $namaPria = null;
+$namaIstri = null;
+$namaPria = null;
 
-    if (isset($infos) && $infos->isNotEmpty()) {
-        $firstInfo = $infos->first();
-        $namaIstri = $firstInfo->nama_pengantin_istri;
-        $namaPria = $firstInfo->nama_pengantin_pria;
-    }
+if (isset($infos) && $infos->isNotEmpty()) {
+$firstInfo = $infos->first();
+$namaIstri = $firstInfo->nama_pengantin_istri;
+$namaPria = $firstInfo->nama_pengantin_pria;
+}
 
-    if (!$namaIstri && isset($biodataWanita) && $biodataWanita->isNotEmpty()) {
-        $namaIstri = $biodataWanita->first()->nama;
-    }
+if (!$namaIstri && isset($biodataWanita) && $biodataWanita->isNotEmpty()) {
+$namaIstri = $biodataWanita->first()->nama;
+}
 
-    if (!$namaPria && isset($biodataPria) && $biodataPria->isNotEmpty()) {
-        $namaPria = $biodataPria->first()->nama;
-    }
+if (!$namaPria && isset($biodataPria) && $biodataPria->isNotEmpty()) {
+$namaPria = $biodataPria->first()->nama;
+}
 
-    $guestTo = request('to') ? request('to') : null;
+$guestTo = request('to') ? request('to') : null;
 
-    if ($isKhitanan) {
-        $namaAnak = $namaPria ?: ($namaIstri ?: 'Ananda');
-        $ogTitle = "Undangan Khitanan " . $namaAnak . ($guestTo ? " - Yth. " . $guestTo : "");
-        $ogDescription = "Tanpa mengurangi rasa hormat, kami mengundang anda untuk hadir di acara khitanan kami.";
-    } else {
-        $namaIstri = $namaIstri ?: 'Mempelai Wanita';
-        $namaPria = $namaPria ?: 'Mempelai Pria';
-        $coupleTitle = $namaIstri . ' & ' . $namaPria;
-        $ogTitle = "Undangan Pernikahan " . $coupleTitle . ($guestTo ? " - Yth. " . $guestTo : "");
-        $ogDescription = "Tanpa mengurangi rasa hormat, kami mengundang anda untuk hadir di acara pernikahan kami.";
-    }
+if ($isKhitanan) {
+$namaAnak = $namaPria ?: ($namaIstri ?: 'Ananda');
+$ogTitle = "Undangan Khitanan " . $namaAnak . ($guestTo ? " - Yth. " . $guestTo : "");
+$ogDescription = "Tanpa mengurangi rasa hormat, kami mengundang anda untuk hadir di acara khitanan kami.";
+} else {
+$namaIstri = $namaIstri ?: 'Mempelai Wanita';
+$namaPria = $namaPria ?: 'Mempelai Pria';
+$coupleTitle = $namaIstri . ' & ' . $namaPria;
+$ogTitle = "Undangan Pernikahan " . $coupleTitle . ($guestTo ? " - Yth. " . $guestTo : "");
+$ogDescription = "Tanpa mengurangi rasa hormat, kami mengundang anda untuk hadir di acara pernikahan kami.";
+}
 
-    // Dynamic Image preview selection:
-    $ogImage = null;
+// Dynamic Image preview selection:
+$ogImage = null;
 
-    // Default fallback image
-    if (!$ogImage) {
-        $ogImage = asset('assets/img/wa-preview.png');
-    }
+// Default fallback image
+if (!$ogImage) {
+$ogImage = asset('assets/img/wa-preview.png');
+}
 
-    $imagePath = parse_url($ogImage, PHP_URL_PATH) ?? '';
-    $imageExtension = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
-    $ogImageType = ($imageExtension === 'jpg' || $imageExtension === 'jpeg') ? 'image/jpeg' : 'image/png';
+$imagePath = parse_url($ogImage, PHP_URL_PATH) ?? '';
+$imageExtension = strtolower(pathinfo($imagePath, PATHINFO_EXTENSION));
+$ogImageType = ($imageExtension === 'jpg' || $imageExtension === 'jpeg') ? 'image/jpeg' : 'image/png';
 @endphp
 
 <!-- Open Graph / Meta WhatsApp Link Preview -->
