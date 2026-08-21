@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Info;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,12 +15,13 @@ class AudioController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
 
         // Cari info user, hubungkan record lama jika null, atau buat baru jika belum ada
-        $info = Info::query()->where('user_id', $user->id)->first();
+        $info = Info::where('user_id', $user->id)->first();
         if (!$info) {
-            $info = Info::query()->whereNull('user_id')->first();
+            $info = Info::whereNull('user_id')->first();
             if ($info) {
                 $info->update(['user_id' => $user->id]);
             }
@@ -74,7 +76,8 @@ class AudioController extends Controller
      */
     public function update(Request $request)
     {
-        $user = auth()->user();
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
         $info = Info::where('user_id', $user->id)->first();
 
         if (!$info) {
@@ -128,7 +131,7 @@ class AudioController extends Controller
     public function storePreset(Request $request)
     {
         /** @var \App\Models\User|null $user */
-        $user = auth()->user();
+        $user = Auth::user();
         if (!$user || !$user->isSuperAdmin()) {
             abort(403, 'Akses khusus Super Admin.');
         }
@@ -162,7 +165,7 @@ class AudioController extends Controller
     public function destroyPreset(Request $request)
     {
         /** @var \App\Models\User|null $user */
-        $user = auth()->user();
+        $user = Auth::user();
         if (!$user || !$user->isSuperAdmin()) {
             abort(403, 'Akses khusus Super Admin.');
         }

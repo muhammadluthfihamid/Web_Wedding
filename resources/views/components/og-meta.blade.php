@@ -36,15 +36,6 @@
     // Dynamic Image preview selection:
     $ogImage = null;
 
-    // Check bride photo
-    if (isset($biodataWanita) && $biodataWanita->isNotEmpty() && !empty($biodataWanita->first()->foto)) {
-        $ogImage = asset('storage/' . $biodataWanita->first()->foto);
-    } 
-    // Check groom / child photo
-    elseif (isset($biodataPria) && $biodataPria->isNotEmpty() && !empty($biodataPria->first()->foto)) {
-        $ogImage = asset('storage/' . $biodataPria->first()->foto);
-    }
-
     // Default fallback image
     if (!$ogImage) {
         $ogImage = asset('assets/img/wa-preview.png');

@@ -44,7 +44,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-slate-600 font-semibold">{{ $gift->nama_bank }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
                                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-bold border shadow-sm"
-                                         style="background-color: {{ $gift->bg_color ?? '#3e4b6d' }}; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
+                                         style="background-color: <?= $gift->bg_color ?? '#3e4b6d' ?>; color: #ffffff; text-shadow: 0 1px 2px rgba(0,0,0,0.5);">
                                         <span class="w-2.5 h-2.5 rounded-full bg-white/80"></span>
                                         {{ strtoupper($gift->bg_color ?? '#3e4b6d') }}
                                     </div>
@@ -57,8 +57,9 @@
                                            class="inline-flex items-center gap-1 px-3 py-1.5 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-lg text-xs font-semibold transition-colors">
                                             <i class="fas fa-edit"></i> Edit
                                         </a>
-                                        <button class="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg text-xs font-semibold transition-colors" 
-                                                onclick="confirmDelete({{ $gift->id }})">
+                                        <button type="button" class="inline-flex items-center gap-1 px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg text-xs font-semibold transition-colors" 
+                                                data-id="{{ $gift->id }}"
+                                                onclick="confirmDelete(this.dataset.id)">
                                             <i class="fas fa-trash"></i> Hapus
                                         </button>
                                     </div>

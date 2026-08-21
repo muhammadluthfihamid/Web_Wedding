@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\HasEncryptedRouteKey;
 use Carbon\Carbon;
 
+/**
+ * @mixin Builder
+ * @mixin Model
+ */
 class Order extends Model
 {
     use HasFactory, HasEncryptedRouteKey;

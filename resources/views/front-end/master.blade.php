@@ -639,7 +639,7 @@
                 <div class="col-md-6 col-lg-5">
 
                     <!-- Digital Debit Card layout with custom admin background color -->
-                    <div class="digital-card mb-4" style="background: {{ $gift->bg_color ?? 'linear-gradient(135deg, #3e4b6d 0%, #252e45 100%)' }}; border: 1px solid rgba(255,255,255,0.15);">
+                    <div class="digital-card mb-4" style="background: <?= $gift->bg_color ?? 'linear-gradient(135deg, #3e4b6d 0%, #252e45 100%)' ?>; border: 1px solid rgba(255,255,255,0.15);">
                         <div class="card-bank-name">{{ $gift->nama_bank }}</div>
                         <div class="card-chip"></div>
                         <div class="card-number-container">

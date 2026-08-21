@@ -2,10 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 
+/**
+ * @mixin Builder
+ * @mixin Model
+ */
 class Setting extends Model
 {
     protected $fillable = ['key', 'value'];

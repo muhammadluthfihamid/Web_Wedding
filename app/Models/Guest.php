@@ -2,9 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasEncryptedRouteKey;
 
+/**
+ * @mixin Builder
+ * @mixin Model
+ */
 class Guest extends Model
 {
     use HasEncryptedRouteKey;

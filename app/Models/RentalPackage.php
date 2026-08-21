@@ -2,10 +2,16 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Traits\HasEncryptedRouteKey;
 
+/**
+ * @mixin Builder
+ * @mixin Model
+ * @method static Builder|RentalPackage aktif()
+ */
 class RentalPackage extends Model
 {
     use HasFactory, HasEncryptedRouteKey;
@@ -45,8 +51,11 @@ class RentalPackage extends Model
 
     /**
      * Scope: hanya paket aktif.
+     *
+     * @param Builder $query
+     * @return Builder
      */
-    public function scopeAktif($query)
+    public function scopeAktif(Builder $query): Builder
     {
         return $query->where('is_aktif', true);
     }

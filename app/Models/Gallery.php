@@ -3,10 +3,15 @@
 namespace App\Models;
 
 use App\Models\GalleryImage;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasEncryptedRouteKey;
 
+/**
+ * @mixin Builder
+ * @mixin Model
+ */
 class Gallery extends Model
 {
     use HasFactory, HasEncryptedRouteKey;

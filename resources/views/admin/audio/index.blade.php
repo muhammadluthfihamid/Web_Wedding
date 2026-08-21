@@ -169,7 +169,9 @@
                                                 </button>
 
                                                 @if(auth()->user() && auth()->user()->isSuperAdmin() && str_starts_with($preset['path'], 'assets/audio/'))
-                                                    <button type="button" onclick="confirmDeletePreset('{{ $preset['filename'] }}')"
+                                                    <button type="button" 
+                                                            data-filename="{{ $preset['filename'] }}"
+                                                            onclick="confirmDeletePreset(this.dataset.filename)"
                                                             class="p-2 text-rose-500 hover:bg-rose-50 rounded-lg text-xs font-semibold flex items-center gap-1 transition-colors"
                                                             title="Hapus preset ini dari playlist sistem">
                                                         <i class="fas fa-trash"></i>

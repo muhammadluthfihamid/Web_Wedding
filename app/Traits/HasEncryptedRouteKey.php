@@ -7,6 +7,7 @@ use Illuminate\Contracts\Encryption\DecryptException;
 
 /**
  * @mixin \Illuminate\Database\Eloquent\Model
+ * @mixin \Illuminate\Database\Eloquent\Builder
  */
 trait HasEncryptedRouteKey
 {

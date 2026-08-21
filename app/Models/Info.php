@@ -3,11 +3,16 @@
 namespace App\Models;
 
 use App\Models\Gallery;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Traits\HasEncryptedRouteKey;
 
+/**
+ * @mixin Builder
+ * @mixin Model
+ */
 class Info extends Model
 {
     use HasFactory, SoftDeletes, HasEncryptedRouteKey;

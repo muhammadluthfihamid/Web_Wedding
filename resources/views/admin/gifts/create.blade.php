@@ -85,7 +85,7 @@
                 <!-- Live Card Preview -->
                 <div class="p-4 rounded-xl border border-slate-100 bg-slate-50">
                     <label class="block text-xs font-semibold uppercase text-slate-400 mb-2">Pratinjau Tampilan Kartu</label>
-                    <div id="card-preview" class="p-5 rounded-2xl text-white shadow-md transition-all duration-300" style="background: {{ old('bg_color', '#3e4b6d') }};">
+                    <div id="card-preview" class="p-5 rounded-2xl text-white shadow-md transition-all duration-300" style="background-color: <?= old('bg_color', '#3e4b6d') ?>;">
                         <div class="flex justify-between items-center mb-3">
                             <span class="text-xs font-bold uppercase tracking-wider opacity-80" id="preview-bank">Nama Bank / E-Wallet</span>
                             <div class="w-8 h-6 bg-yellow-400/80 rounded-md"></div>

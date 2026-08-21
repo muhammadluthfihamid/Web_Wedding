@@ -2,9 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * @mixin Builder
+ * @mixin Model
+ * @method static Builder|Theme active()
+ * @method static Builder|Theme wedding()
+ * @method static Builder|Theme khitanan()
+ */
 class Theme extends Model
 {
     use HasFactory;
@@ -47,17 +55,29 @@ class Theme extends Model
         return asset('storage/' . $this->thumbnail);
     }
 
-    public function scopeActive($query)
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
-    public function scopeWedding($query)
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeWedding(Builder $query): Builder
     {
         return $query->where('category', 'wedding');
     }
 
-    public function scopeKhitanan($query)
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeKhitanan(Builder $query): Builder
     {
         return $query->where('category', 'khitanan');
     }
