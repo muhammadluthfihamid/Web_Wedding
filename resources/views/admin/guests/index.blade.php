@@ -1,4 +1,7 @@
+<?
+
 use Illuminate\Support\Facades\Auth;
+?>
 @extends('admin.layouts.admin')
 
 @section('main-content')
