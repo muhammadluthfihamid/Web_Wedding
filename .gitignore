@@ -25,3 +25,5 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 storage/logs/*.log
+cloudflared.exe
+*.exe

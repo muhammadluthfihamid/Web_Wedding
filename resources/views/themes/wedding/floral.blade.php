@@ -97,21 +97,40 @@
         <div class="max-w-4xl mx-auto text-center" data-aos="fade-up">
             <h2 class="text-4xl font-serif-garamond font-bold text-rose-900 mb-10">Waktu & Tempat Pernikahan</h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            @php
+                $hasAcara3 = !empty($firstInfo->mulai_acara_3);
+                $gridCols = $hasAcara3 ? 'grid-cols-1 md:grid-cols-3' : 'grid-cols-1 md:grid-cols-2';
+            @endphp
+            <div class="grid {{ $gridCols }} gap-8">
                 <div class="bg-white border border-rose-200/60 p-6 rounded-2xl text-left shadow-sm">
                     <h3 class="font-serif-garamond text-xl font-bold text-rose-800 mb-2">Akad Nikah</h3>
-                    <p class="text-xs text-slate-500 mb-3"><i class="far fa-calendar text-rose-500 mr-2"></i> {{ $firstInfo->tanggal_akad ? \Carbon\Carbon::parse($firstInfo->tanggal_akad)->translatedFormat('l, d F Y') : '-' }}</p>
-                    <p class="text-sm text-slate-700 mb-2"><i class="far fa-clock text-rose-500 mr-2"></i> {{ $firstInfo->waktu_akad ?? '08:00 WIB' }}</p>
-                    <p class="text-sm text-slate-700"><i class="fas fa-map-marker-alt text-rose-500 mr-2"></i> {{ $firstInfo->lokasi_akad ?? '-' }}</p>
+                    <p class="text-xs text-slate-500 mb-3"><i class="far fa-calendar text-rose-500 mr-2"></i> {{ $firstInfo->tanggal_pernikahan ? \Carbon\Carbon::parse($firstInfo->tanggal_pernikahan)->translatedFormat('l, d F Y') : '-' }}</p>
+                    <p class="text-sm text-slate-700 mb-2"><i class="far fa-clock text-rose-500 mr-2"></i> {{ $firstInfo->mulai_akad ? \Carbon\Carbon::parse($firstInfo->mulai_akad)->format('H.i') : '08.00' }} - {{ $firstInfo->selesai_akad ? \Carbon\Carbon::parse($firstInfo->selesai_akad)->format('H.i') : 'Selesai' }} WIB</p>
+                    <p class="text-sm text-slate-700"><i class="fas fa-map-marker-alt text-rose-500 mr-2"></i> {{ $firstInfo->alamat ?? '-' }}</p>
                 </div>
 
                 <div class="bg-white border border-rose-200/60 p-6 rounded-2xl text-left shadow-sm">
                     <h3 class="font-serif-garamond text-xl font-bold text-rose-800 mb-2">Resepsi Pernikahan</h3>
-                    <p class="text-xs text-slate-500 mb-3"><i class="far fa-calendar text-rose-500 mr-2"></i> {{ $firstInfo->tanggal_resepsi ? \Carbon\Carbon::parse($firstInfo->tanggal_resepsi)->translatedFormat('l, d F Y') : '-' }}</p>
-                    <p class="text-sm text-slate-700 mb-2"><i class="far fa-clock text-rose-500 mr-2"></i> {{ $firstInfo->waktu_resepsi ?? '11:00 WIB - Selesai' }}</p>
-                    <p class="text-sm text-slate-700"><i class="fas fa-map-marker-alt text-rose-500 mr-2"></i> {{ $firstInfo->lokasi_resepsi ?? '-' }}</p>
+                    <p class="text-xs text-slate-500 mb-3"><i class="far fa-calendar text-rose-500 mr-2"></i> {{ $firstInfo->tanggal_pernikahan ? \Carbon\Carbon::parse($firstInfo->tanggal_pernikahan)->translatedFormat('l, d F Y') : '-' }}</p>
+                    <p class="text-sm text-slate-700 mb-2"><i class="far fa-clock text-rose-500 mr-2"></i> {{ $firstInfo->mulai_resepsi ? \Carbon\Carbon::parse($firstInfo->mulai_resepsi)->format('H.i') : '11.00' }} WIB - Selesai</p>
+                    <p class="text-sm text-slate-700"><i class="fas fa-map-marker-alt text-rose-500 mr-2"></i> {{ $firstInfo->alamat ?? '-' }}</p>
                 </div>
+
+                @if($hasAcara3)
+                <div class="bg-white border border-rose-200/60 p-6 rounded-2xl text-left shadow-sm">
+                    <h3 class="font-serif-garamond text-xl font-bold text-rose-800 mb-2">{{ $firstInfo->nama_acara_3 ?: 'Resepsi Malam' }}</h3>
+                    <p class="text-xs text-slate-500 mb-3"><i class="far fa-calendar text-rose-500 mr-2"></i> {{ $firstInfo->tanggal_pernikahan ? \Carbon\Carbon::parse($firstInfo->tanggal_pernikahan)->translatedFormat('l, d F Y') : '-' }}</p>
+                    <p class="text-sm text-slate-700 mb-2"><i class="fas fa-moon text-rose-500 mr-2"></i> {{ \Carbon\Carbon::parse($firstInfo->mulai_acara_3)->format('H.i') }} WIB {{ $firstInfo->selesai_acara_3 ? '- ' . \Carbon\Carbon::parse($firstInfo->selesai_acara_3)->format('H.i') . ' WIB' : '- Selesai' }}</p>
+                    <p class="text-sm text-slate-700"><i class="fas fa-map-marker-alt text-rose-500 mr-2"></i> {{ $firstInfo->alamat ?? '-' }}</p>
+                </div>
+                @endif
             </div>
+
+            @if($firstInfo->deskripsi)
+            <div class="mt-8 text-xs text-slate-600 max-w-2xl mx-auto leading-relaxed" style="white-space: pre-line;">
+                {!! nl2br(e($firstInfo->deskripsi)) !!}
+            </div>
+            @endif
 
             @if($firstInfo->link_maps)
             <div class="mt-8">

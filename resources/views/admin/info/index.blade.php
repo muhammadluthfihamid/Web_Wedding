@@ -98,7 +98,7 @@
                             @if($info->deskripsi)
                                 <div class="pt-2 border-t border-slate-100">
                                     <span class="text-xs text-slate-400 block font-semibold">Deskripsi / Catatan Tambahan:</span>
-                                    <span class="text-sm text-slate-600 block mt-1">{{ $info->deskripsi }}</span>
+                                    <div class="text-sm text-slate-600 block mt-1 leading-relaxed whitespace-pre-line">{!! nl2br(e($info->deskripsi)) !!}</div>
                                 </div>
                             @endif
                         </div>
@@ -122,6 +122,20 @@
                                 <span class="text-xs text-indigo-700 block font-bold uppercase tracking-wider">Mulai Resepsi</span>
                                 <span class="text-lg font-extrabold text-indigo-950 block mt-1"><i class="far fa-clock text-indigo-600 mr-1.5"></i>{{ $info->mulai_resepsi }}</span>
                             </div>
+                            @if($info->mulai_acara_3)
+                            <div class="bg-purple-50/40 p-3.5 rounded-xl border border-purple-100">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-purple-700 block font-bold uppercase tracking-wider">{{ $info->nama_acara_3 ?: 'Sesi Acara Malam' }}</span>
+                                    <span class="text-[10px] bg-purple-100 text-purple-700 font-semibold px-2 py-0.5 rounded-full">Kartu ke-3</span>
+                                </div>
+                                <span class="text-lg font-extrabold text-purple-950 block mt-1">
+                                    <i class="far fa-clock text-purple-600 mr-1.5"></i>{{ $info->mulai_acara_3 }} {{ $info->selesai_acara_3 ? '- ' . $info->selesai_acara_3 : '- Selesai' }}
+                                </span>
+                                @if($info->keterangan_acara_3)
+                                    <div class="text-xs text-purple-600 mt-1 italic whitespace-pre-line">{!! nl2br(e($info->keterangan_acara_3)) !!}</div>
+                                @endif
+                            </div>
+                            @endif
                         </div>
 
                         @if($info->latitude && $info->longitude)

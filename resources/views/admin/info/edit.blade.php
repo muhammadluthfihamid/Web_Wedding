@@ -121,10 +121,43 @@
                                    class="block w-full px-3 py-2.5 border border-slate-200 rounded-lg text-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all">
                         </div>
 
+                        <!-- Sesi Acara Malam / Tambahan (Opsional) -->
+                        <div class="p-4 bg-slate-50 border border-slate-200/80 rounded-xl space-y-3">
+                            <div class="flex items-center justify-between">
+                                <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">
+                                    <i class="fas fa-moon text-indigo-500 mr-1"></i> Sesi Acara Malam / Tambahan (Opsional)
+                                </label>
+                                <span class="text-[11px] bg-indigo-50 text-indigo-600 font-semibold px-2 py-0.5 rounded-full">Kartu ke-3</span>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Nama Sesi Acara:</label>
+                                <input type="text" name="nama_acara_3" value="{{ old('nama_acara_3', $info->nama_acara_3) }}" placeholder="Contoh: Resepsi Malam / Ramah Tamah"
+                                       class="block w-full px-3 py-2 border border-slate-200 rounded-lg text-slate-950 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs transition-all">
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Jam Mulai Malam:</label>
+                                    <input type="time" name="mulai_acara_3" value="{{ old('mulai_acara_3', $info->mulai_acara_3 ? \Illuminate\Support\Str::substr($info->mulai_acara_3, 0, 5) : '') }}"
+                                           class="block w-full px-3 py-2 border border-slate-200 rounded-lg text-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-600 mb-1">Jam Selesai (Opsional):</label>
+                                    <input type="time" name="selesai_acara_3" value="{{ old('selesai_acara_3', $info->selesai_acara_3 ? \Illuminate\Support\Str::substr($info->selesai_acara_3, 0, 5) : '') }}"
+                                           class="block w-full px-3 py-2 border border-slate-200 rounded-lg text-slate-950 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs transition-all">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-600 mb-1">Keterangan / Pesan Kartu Acara Malam (Mendukung Enter / Baris Baru):</label>
+                                <textarea name="keterangan_acara_3" rows="2" placeholder="Contoh: Kehadiran Anda merupakan kehormatan terbesar bagi kami."
+                                       class="block w-full px-3 py-2 border border-slate-200 rounded-lg text-slate-950 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-xs transition-all">{{ old('keterangan_acara_3', $info->keterangan_acara_3) }}</textarea>
+                            </div>
+                        </div>
+
                         <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Deskripsi / Catatan Acara:</label>
-                            <textarea name="deskripsi" rows="3" placeholder="Masukkan keterangan tambahan..."
+                            <label class="block text-sm font-semibold text-slate-700 mb-1">Deskripsi / Catatan Acara (Mendukung Enter / Paragraf Baru):</label>
+                            <textarea name="deskripsi" rows="4" placeholder="Masukkan keterangan acara atau rincian nama (tekan Enter untuk membuat baris / paragraf baru)..."
                                       class="block w-full px-3 py-2.5 border border-slate-200 rounded-lg text-slate-950 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all">{{ old('deskripsi', $info->deskripsi) }}</textarea>
+                            <p class="text-[11px] text-slate-500 mt-1">💡 Tips: Setiap kali Anda menekan tombol <strong>Enter</strong>, teks akan otomatis tampil sebagai baris / paragraf baru di halaman undangan.</p>
                         </div>
                     </div>
                 </div>

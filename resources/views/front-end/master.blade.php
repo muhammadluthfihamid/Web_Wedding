@@ -356,19 +356,28 @@
                     </a>
                     @endif
 
+                    @if($info->deskripsi)
+                    <div class="description small text-white-50 px-lg-5 mb-3 leading-relaxed" style="line-height: 1.8; white-space: pre-line;">
+                        {!! nl2br(e($info->deskripsi)) !!}
+                    </div>
+                    @else
                     <p class="description small text-white-50 px-lg-5">
                         Diharapkan untuk memperhatikan alamat dan tanggal pelaksanaan. Apabila ada perubahan lokasi,
                         akan kami informasikan kembali secara berkala.
                     </p>
+                    @endif
                 </div>
             </div>
 
-            <!-- Event Cards for Akad & Resepsi -->
+            <!-- Event Cards for Akad, Resepsi, & Acara Malam -->
             <div class="row justify-content-center mt-4 mt-md-5 g-4">
                 @php
                 // Calendar link generator parameters
                 $eventTitle = 'Pernikahan ' . $info->nama_pengantin_pria . ' & ' . $info->nama_pengantin_istri;
                 $dateStr = \Carbon\Carbon::parse($info->tanggal_pernikahan)->format('Ymd');
+
+                $hasAcara3 = !empty($info->mulai_acara_3);
+                $cardCol = $hasAcara3 ? 'col-12 col-md-6 col-lg-4' : 'col-12 col-md-6 col-lg-5';
 
                 $startAkad = \Carbon\Carbon::parse($info->mulai_akad)->format('Hi') . '00';
                 $endAkad = \Carbon\Carbon::parse($info->selesai_akad)->format('Hi') . '00';
@@ -376,10 +385,17 @@
 
                 $startResepsi = \Carbon\Carbon::parse($info->mulai_resepsi)->format('Hi') . '00';
                 $gCalUrlResepsi = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" . urlencode($eventTitle . ' - Resepsi Pernikahan') . "&dates=" . $dateStr . "T" . $startResepsi . "/" . $dateStr . "T220000&details=Mohon+doa+dan+restu&location=" . urlencode($info->alamat);
+
+                if ($hasAcara3) {
+                    $namaAcara3 = $info->nama_acara_3 ?: 'Resepsi Malam';
+                    $startAcara3 = \Carbon\Carbon::parse($info->mulai_acara_3)->format('Hi') . '00';
+                    $endAcara3 = $info->selesai_acara_3 ? \Carbon\Carbon::parse($info->selesai_acara_3)->format('Hi') . '00' : '230000';
+                    $gCalUrlAcara3 = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=" . urlencode($eventTitle . ' - ' . $namaAcara3) . "&dates=" . $dateStr . "T" . $startAcara3 . "/" . $dateStr . "T" . $endAcara3 . "&details=Mohon+doa+dan+restu&location=" . urlencode($info->alamat);
+                }
                 @endphp
 
                 <!-- AKAD CARD -->
-                <div class="col-12 col-md-6 col-lg-5" data-aos="flip-left">
+                <div class="{{ $cardCol }}" data-aos="flip-left">
                     <div class="card event-card text-center h-100">
                         <div class="card-header">
                             Akad Nikah
@@ -410,7 +426,7 @@
                 </div>
 
                 <!-- RESEPSI CARD -->
-                <div class="col-12 col-md-6 col-lg-5" data-aos="flip-right">
+                <div class="{{ $cardCol }}" data-aos="flip-right">
                     <div class="card event-card text-center h-100">
                         <div class="card-header">
                             Resepsi Pernikahan
@@ -438,6 +454,39 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- 3RD EVENT CARD (ACARA MALAM / TAMBAHAN) -->
+                @if($hasAcara3)
+                <div class="{{ $cardCol }}" data-aos="flip-up">
+                    <div class="card event-card text-center h-100">
+                        <div class="card-header">
+                            {{ $namaAcara3 }}
+                        </div>
+                        <div class="card-body d-flex flex-column justify-content-between">
+                            <div class="row g-2 align-items-center justify-content-center">
+                                <div class="col-6 border-end border-light-subtle px-1 px-sm-2">
+                                    <i class="bi bi-moon-stars d-block mb-2 text-warning"></i>
+                                    <span>{{ \Carbon\Carbon::parse($info->mulai_acara_3)->format('H.i') }} -
+                                        {{ $info->selesai_acara_3 ? \Carbon\Carbon::parse($info->selesai_acara_3)->format('H.i') : 'Selesai' }}</span>
+                                </div>
+                                <div class="col-6 px-1 px-sm-2">
+                                    <i class="bi bi-calendar3 d-block mb-2"></i>
+                                    <span>{{ \Carbon\Carbon::parse($info->tanggal_pernikahan)->translatedFormat('l') }}<br>
+                                        <strong>{{ \Carbon\Carbon::parse($info->tanggal_pernikahan)->translatedFormat('d F Y') }}</strong></span>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <a href="{{ $gCalUrlAcara3 }}" target="_blank" class="btn btn-outline-info btn-sm">
+                                    <i class="bi bi-calendar-check-fill me-1"></i> Simpan ke Kalender
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-footer" style="white-space: pre-line;">
+                            {!! nl2br(e($info->keterangan_acara_3 ?: 'Kehadiran dan kebersamaan Anda sangat kami nantikan.')) !!}
+                        </div>
+                    </div>
+                </div>
+                @endif
             </div>
         </div>
     </section>

@@ -57,6 +57,7 @@ $ogImageType = ($imageExtension === 'jpg' || $imageExtension === 'jpeg') ? 'imag
 <meta property="og:image:type" content="{{ $ogImageType }}">
 <meta property="og:image:width" content="600">
 <meta property="og:image:height" content="600">
+<meta itemprop="image" content="{{ $ogImage }}">
 
 <link rel="icon" type="{{ $ogImageType }}" href="{{ $ogImage }}">
 <link rel="shortcut icon" type="{{ $ogImageType }}" href="{{ $ogImage }}">
