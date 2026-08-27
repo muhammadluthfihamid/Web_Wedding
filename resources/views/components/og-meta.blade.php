@@ -38,7 +38,7 @@ $ogImage = null;
 
 // Default fallback image
 if (!$ogImage) {
-$ogImage = asset('assets/img/wa-preview.png');
+$ogImage = asset('assets/img/wa-preview.jpg');
 }
 
 $imagePath = parse_url($ogImage, PHP_URL_PATH) ?? '';
