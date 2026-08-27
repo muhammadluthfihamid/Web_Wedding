@@ -53,7 +53,7 @@ use Illuminate\Support\Facades\Auth;
         </div>
         <div>
             <span class="block text-sm text-slate-500 font-medium">Sudah Dikirim WA</span>
-            <span class="text-2xl font-bold text-slate-950">{{ $guests->where('status_kirim', true)->count() }}</span>
+            <span id="stat-sudah-dikirim" class="text-2xl font-bold text-slate-950">{{ $guests->where('status_kirim', true)->count() }}</span>
         </div>
     </div>
     <div class="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4">
@@ -138,7 +138,7 @@ use Illuminate\Support\Facades\Auth;
                         @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
-                        <button type="button" data-guest-id="{{ $guest->id }}" onclick="toggleSentStatus(this.dataset.guestId, this)"
+                        <button type="button" data-guest-id="{{ $guest->id }}" onclick="toggleSentStatus('{{ $guest->id }}', this)"
                             class="status-btn inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all cursor-pointer {{ $guest->status_kirim ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100' : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200' }}"
                             title="Klik untuk mengubah status pengiriman WA">
                             <i class="fas {{ $guest->status_kirim ? 'fa-check-circle text-emerald-600' : 'fa-clock text-slate-400' }}"></i>
@@ -158,11 +158,12 @@ use Illuminate\Support\Facades\Auth;
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
                         <div class="flex items-center justify-center gap-1.5">
-                            <a href="{{ $waLink }}" target="_blank" data-guest-id="{{ $guest->id }}" onclick="markAsSentOnWaClick(this.dataset.guestId)"
+                            <a href="{{ $waLink }}" target="_blank" onclick="markAsSentOnWaClick('{{ $guest->id }}')"
                                 class="inline-flex items-center gap-1 px-2.5 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg text-xs font-semibold transition-colors">
                                 <i class="fab fa-whatsapp"></i> Kirim WA
                             </a>
                             <button onclick="openShareModal(this)"
+                                data-id="{{ $guest->id }}"
                                 data-nama="{{ $guest->nama }}"
                                 data-nohp="{{ $guest->no_hp }}"
                                 data-link="{{ $weddingUrl }}"
@@ -302,7 +303,7 @@ use Illuminate\Support\Facades\Auth;
             <button type="button" onclick="copyShareMessage()" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors">
                 <i class="fas fa-copy"></i> Salin Pesan
             </button>
-            <a href="#" id="share-wa-btn" target="_blank" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-colors">
+            <a href="#" id="share-wa-btn" target="_blank" onclick="onShareModalWaClick()" class="inline-flex items-center justify-center gap-1.5 px-4 py-2 text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg shadow-sm transition-colors">
                 <i class="fab fa-whatsapp"></i> Kirim WhatsApp
             </a>
         </div>
@@ -355,6 +356,8 @@ use Illuminate\Support\Facades\Auth;
 
 <!-- Scripts -->
 <script>
+    let currentShareGuestId = null;
+
     function openImportModal() {
         document.getElementById('import-modal').classList.remove('hidden');
         document.getElementById('import-modal').classList.add('flex');
@@ -365,25 +368,42 @@ use Illuminate\Support\Facades\Auth;
         document.getElementById('import-modal').classList.add('hidden');
     }
 
-    function toggleSentStatus(guestId, btnElement) {
+    function toggleSentStatus(guestId, btnElement, targetStatus = null) {
+        if (!guestId) return;
+
+        const btn = btnElement || document.querySelector(`button.status-btn[data-guest-id="${guestId}"]`);
+        if (btn) btn.style.pointerEvents = 'none';
+
+        let bodyPayload = {};
+        if (targetStatus !== null) {
+            bodyPayload.status = targetStatus;
+        }
+
         fetch("{{ url('/admin/guests') }}/" + guestId + "/toggle-sent", {
                 method: "POST",
                 headers: {
                     "X-CSRF-TOKEN": "{{ csrf_token() }}",
                     "Accept": "application/json",
                     "Content-Type": "application/json"
-                }
+                },
+                body: JSON.stringify(bodyPayload)
             })
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                return res.json();
+            })
             .then(data => {
                 if (data.status === 'success') {
-                    if (data.status_kirim) {
-                        btnElement.className = "status-btn inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all cursor-pointer bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100";
-                        btnElement.innerHTML = '<i class="fas fa-check-circle text-emerald-600"></i><span>Sudah Dikirim</span>';
-                    } else {
-                        btnElement.className = "status-btn inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all cursor-pointer bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200";
-                        btnElement.innerHTML = '<i class="fas fa-clock text-slate-400"></i><span>Belum Dikirim</span>';
+                    if (btn) {
+                        if (data.status_kirim) {
+                            btn.className = "status-btn inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all cursor-pointer bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100";
+                            btn.innerHTML = '<i class="fas fa-check-circle text-emerald-600"></i><span>Sudah Dikirim</span>';
+                        } else {
+                            btn.className = "status-btn inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold border transition-all cursor-pointer bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200";
+                            btn.innerHTML = '<i class="fas fa-clock text-slate-400"></i><span>Belum Dikirim</span>';
+                        }
                     }
+                    updateSentStatsCounter();
                     Swal.fire({
                         toast: true,
                         position: 'top-end',
@@ -396,15 +416,42 @@ use Illuminate\Support\Facades\Auth;
             })
             .catch(err => {
                 console.error("Gagal memperbarui status kirim: ", err);
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'error',
+                    title: 'Gagal memperbarui status kirim',
+                    showConfirmButton: false,
+                    timer: 2000
+                });
+            })
+            .finally(() => {
+                if (btn) btn.style.pointerEvents = 'auto';
             });
     }
 
     function markAsSentOnWaClick(guestId) {
-        // auto toggle status to true when clicking Kirim WA
+        if (!guestId) return;
         const btn = document.querySelector(`button.status-btn[data-guest-id="${guestId}"]`);
         if (btn && btn.innerText.includes('Belum Dikirim')) {
-            toggleSentStatus(guestId, btn);
+            toggleSentStatus(guestId, btn, true);
         }
+    }
+
+    function onShareModalWaClick() {
+        if (currentShareGuestId) {
+            markAsSentOnWaClick(currentShareGuestId);
+        }
+    }
+
+    function updateSentStatsCounter() {
+        const buttons = document.querySelectorAll('.status-btn span');
+        let count = 0;
+        buttons.forEach(b => {
+            if (b.innerText.trim() === 'Sudah Dikirim') count++;
+        });
+        const statEl = document.getElementById('stat-sudah-dikirim');
+        if (statEl) statEl.innerText = count;
     }
 
     function copyToClipboard(text) {
@@ -490,6 +537,7 @@ use Illuminate\Support\Facades\Auth;
     }
 
     function openShareModal(button) {
+        currentShareGuestId = button.getAttribute('data-id');
         const nama = button.getAttribute('data-nama');
         const nohp = button.getAttribute('data-nohp');
         const link = button.getAttribute('data-link');
@@ -511,6 +559,7 @@ use Illuminate\Support\Facades\Auth;
     }
 
     function closeShareModal() {
+        currentShareGuestId = null;
         document.getElementById('share-modal').classList.remove('flex');
         document.getElementById('share-modal').classList.add('hidden');
     }

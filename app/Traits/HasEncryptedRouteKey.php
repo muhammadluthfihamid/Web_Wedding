@@ -59,7 +59,11 @@ trait HasEncryptedRouteKey
             // fallback to numeric check
         }
 
-        // Strictly require valid encrypted route keys (Raw numeric IDs like /1/ are rejected with 404)
+        // 3. Support numeric IDs (e.g. internal admin AJAX requests or forms)
+        if (is_numeric($value)) {
+            return $this->where($field ?? $this->getKeyName(), $value)->first();
+        }
+
         return null;
     }
 }

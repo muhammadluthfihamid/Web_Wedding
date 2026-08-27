@@ -87,7 +87,7 @@ class GuestController extends Controller
     /**
      * Toggle status pengiriman WhatsApp (Sudah / Belum Dikirim).
      */
-    public function toggleSent(Guest $guest)
+    public function toggleSent(Request $request, Guest $guest)
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
@@ -95,12 +95,16 @@ class GuestController extends Controller
             return response()->json(['status' => 'error', 'message' => 'Akses ditolak.'], 403);
         }
 
-        $guest->status_kirim = !$guest->status_kirim;
+        if ($request->has('status')) {
+            $guest->status_kirim = filter_var($request->input('status'), FILTER_VALIDATE_BOOLEAN);
+        } else {
+            $guest->status_kirim = !$guest->status_kirim;
+        }
         $guest->save();
 
         return response()->json([
             'status' => 'success',
-            'status_kirim' => $guest->status_kirim,
+            'status_kirim' => (bool) $guest->status_kirim,
             'message' => $guest->status_kirim ? 'Status diperbarui: Sudah Dikirim' : 'Status diperbarui: Belum Dikirim'
         ]);
     }
